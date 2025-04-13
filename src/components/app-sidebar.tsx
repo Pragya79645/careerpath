@@ -24,6 +24,16 @@ const items = [
     icon: Home,
   },
   {
+    title: "Profile",
+    url: "/profile",
+    icon: Home,
+  },
+  {
+    title: "Company Targeted",
+    url: "/company-target",
+    icon: Home,
+  },
+  {
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,

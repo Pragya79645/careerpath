@@ -1,5 +1,6 @@
 "use client"
 
+import { ThreeDCardDemo } from "@/components/3d-card"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { ArrowRight, Upload, Sparkles, ChevronDown } from "lucide-react"
@@ -119,26 +120,7 @@ export default function Home() {
               className="relative h-[500px] hidden lg:block"
             >
               {/* 3D illustration or mockup would go here */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-teal-500/20 rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center">
-                  <div className="w-4/5 h-4/5 rounded-xl bg-background/30 backdrop-blur-md border border-white/10 p-6 flex flex-col">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                    </div>
-                    <div className="flex-1 flex flex-col gap-4">
-                      <div className="h-8 w-3/4 rounded-md bg-white/20"></div>
-                      <div className="h-20 w-full rounded-md bg-white/10"></div>
-                      <div className="h-12 w-1/2 rounded-md bg-gradient-to-r from-purple-500/40 to-blue-500/40"></div>
-                      <div className="flex gap-2 mt-auto">
-                        <div className="h-10 w-10 rounded-full bg-white/20"></div>
-                        <div className="h-10 flex-1 rounded-md bg-white/10"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div><ThreeDCardDemo /></div>
             </motion.div>
           </div>
         </div>
