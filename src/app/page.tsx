@@ -1,7 +1,12 @@
 "use client"
 
 import { ThreeDCardDemo } from "@/components/3d-card"
+import ButtonWrapper from "@/components/getStarted"
+
+import { SVGMaskEffectDemo } from "@/components/mid"
 import { Button } from "@/components/ui/button"
+import Example from "@/components/uploadResumeBtn"
+import { HeroHighlightDemo } from "@/components/violet-text"
 import { motion } from "framer-motion"
 import { ArrowRight, Upload, Sparkles, ChevronDown } from "lucide-react"
 
@@ -18,7 +23,7 @@ export default function Home() {
           {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-3xl"
+              className="absolute rounded-full bg-gradient-to-r from-purple-400/20 to-blue-400/20 blur-3xl"
               style={{
                 width: `${Math.random() * 400 + 200}px`,
                 height: `${Math.random() * 400 + 200}px`,
@@ -56,10 +61,8 @@ export default function Home() {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="inline-block"
               >
-                <div className="bg-gradient-to-r from-purple-400 via-teal-400 to-blue-500 p-px rounded-full">
-                  <div className="bg-background rounded-full p-2">
-                    <Sparkles className="h-8 w-8 text-purple-400" />
-                  </div>
+                <div className="bg-gradient-to-r from-blue-700 via-blue-200 to-blue-900 p-px rounded-full">
+                 
                 </div>
               </motion.div>
 
@@ -69,21 +72,13 @@ export default function Home() {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight"
               >
-                <span className="block">✨ Your Future Called.</span>
+               
                 <span className="bg-gradient-to-r from-purple-400 via-teal-400 to-blue-500 bg-clip-text text-transparent">
                   Let&apos;s Pick Up.
                 </span>
               </motion.h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="text-xl md:text-2xl text-muted-foreground max-w-xl"
-              >
-                AI + You = Career Glow-Up. Discover your perfect career path with our AI-powered platform designed for
-                Gen Z professionals.
-              </motion.p>
+          <div><HeroHighlightDemo /></div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -93,25 +88,26 @@ export default function Home() {
               >
                 <Button
                   size="lg"
-                  className="group relative overflow-hidden bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 transition-all duration-300 h-14 px-8 text-lg"
+                  className=" relative overflow-hidden h-14 px-0 text-lg"
                 >
-                  <span className="relative z-10 flex items-center">
-                    Spill My Dreams <ArrowRight className="ml-2 h-5 w-5" />
+                  <span className="relative flex items-center">
+                   <ButtonWrapper />
                   </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="absolute "></span>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="group relative overflow-hidden border-purple-500 hover:border-purple-600 transition-all duration-300 h-14 px-8 text-lg"
+                  className="group relative overflow-hidden border-purple-500 hover:border-purple-600 transition-all duration-300 h-14 px-0 text-lg"
                 >
-                  <span className="relative z-10 flex items-center">
-                    Upload Resume <Upload className="ml-2 h-5 w-5" />
+                  <span className=" z-10 flex items-center">
+                    <Example />
                   </span>
                   <span className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </Button>
               </motion.div>
             </motion.div>
+          
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -134,6 +130,7 @@ export default function Home() {
           <ChevronDown className="h-8 w-8 text-muted-foreground" />
         </motion.div>
       </section>
+      <div><SVGMaskEffectDemo /></div>
 
       {/* Featured Careers Section - Full Width */}
       <section className="w-full py-20 bg-gradient-to-b from-background to-background/95 relative">

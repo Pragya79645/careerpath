@@ -108,8 +108,7 @@ export default function ProfilePage() {
                   </div>
                   <Progress
                     value={42}
-                    className="h-2"
-                    indicatorClassName="bg-gradient-to-r from-purple-500 to-blue-500"
+                    className="h-2 bg-gradient-to-r from-purple-500 to-blue-500"
                   />
                 </div>
 
@@ -244,8 +243,7 @@ export default function ProfilePage() {
                       </div>
                       <Progress
                         value={recommendation.progress}
-                        className="h-1"
-                        indicatorClassName="bg-gradient-to-r from-teal-500 to-blue-500"
+                        className="h-1 bg-gradient-to-r from-teal-500 to-blue-500"
                       />
                     </div>
                   ))}
@@ -466,8 +464,7 @@ export default function ProfilePage() {
                                   </span>
                                   <Progress
                                     value={65}
-                                    className="h-1"
-                                    indicatorClassName="bg-gradient-to-r from-blue-500 to-purple-500"
+                                    className="h-1 bg-gradient-to-r from-blue-500 to-purple-500"
                                   />
                                 </div>
                               )}
@@ -535,8 +532,7 @@ export default function ProfilePage() {
                               </div>
                               <Progress
                                 value={course.progress}
-                                className="h-2"
-                                indicatorClassName="bg-gradient-to-r from-blue-500 to-purple-500"
+                                className="h-2 bg-gradient-to-r from-blue-500 to-purple-500"
                               />
                             </div>
                             <div className="text-xs text-muted-foreground">Last activity: {course.lastActivity}</div>

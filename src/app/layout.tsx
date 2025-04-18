@@ -2,10 +2,11 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "next-themes"
+
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeProvider } from "next-themes"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+   
           <SidebarProvider>
             <div className="flex min-h-screen">
               <AppSidebar />
@@ -33,11 +34,12 @@ export default function RootLayout({
                   </h1>
                   <ThemeToggle />
                 </header>
+            
                 <main className="flex-1">{children}</main>
               </div>
             </div>
           </SidebarProvider>
-        </ThemeProvider>
+
       </body>
     </html>
   )
