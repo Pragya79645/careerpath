@@ -9,8 +9,14 @@ const ButtonWrapper = () => {
 };
 
 const RoundedSlideButton = () => {
+  const handleNavigation = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    window.location.href = "/auth";
+  };
+
   return (
     <button
+      onClick={handleNavigation}
       className={`
         relative z-0 flex items-center gap-2 overflow-hidden rounded-lg border-[1px] 
         border-violet-300 px-4 py-2 font-semibold

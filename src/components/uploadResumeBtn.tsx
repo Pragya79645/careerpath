@@ -3,21 +3,30 @@ import React from "react";
 const Example = () => {
   return (
     <div className="grid min-h-[200px] place-content-center bg-slate-900 p-4">
-      <DrawOutlineButton>Upload Resume</DrawOutlineButton>
+      <DrawOutlineButton onClick={() => window.location.href = "/resume"}>Upload Resume</DrawOutlineButton>
     </div>
   );
 };
 
 const DrawOutlineButton = ({
   children,
+  onClick,
   ...rest
 }: React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Call the original onClick if provided
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
   return (
     <button
       {...rest}
+      onClick={handleClick}
       className="group relative px-4 py-2 font-medium text-slate-100 transition-colors duration-[400ms] hover:text-indigo-300"
     >
       <span>{children}</span>

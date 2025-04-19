@@ -1,9 +1,11 @@
 "use client"
 
 import { ThreeDCardDemo } from "@/components/3d-card"
+import { AnimatedText } from "@/components/animated-text"
 import ButtonWrapper from "@/components/getStarted"
 
 import { SVGMaskEffectDemo } from "@/components/mid"
+import { SparklesText } from "@/components/sparkle-text"
 import { Button } from "@/components/ui/button"
 import Example from "@/components/uploadResumeBtn"
 import { HeroHighlightDemo } from "@/components/violet-text"
@@ -141,8 +143,8 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Trending Career Paths</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+          <div><SparklesText text={"About US"} /></div>
+            <p className="text-muted-foreground max-w-2xl mx-auto mt-6">
               Discover the hottest career paths that match your skills and interests
             </p>
           </motion.div>
@@ -237,8 +239,8 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Success Stories</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+         <div><AnimatedText text={"Success Stories"} /></div>
+            <p className="text-muted-foreground max-w-2xl mx-auto mt-6">
               See how Career Path Navigator has transformed careers
             </p>
           </motion.div>
