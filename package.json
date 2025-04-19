@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
+    "cobe": "^0.6.3",
     "firebase": "^11.6.0",
     "framer-motion": "^12.7.4",
     "fs": "0.0.1-security",
