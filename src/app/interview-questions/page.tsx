@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Send, Loader2, Sparkles, MoveRight, Check, Bookmark, X, MessageSquare } from 'lucide-react';
+import { Send, Loader2, Sparkles, MoveRight, Check, Bookmark, X, MessageSquare, Code } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SparklesText } from '@/components/sparkle-text';
 
@@ -82,7 +82,8 @@ export default function InterviewQuestionsGenerator() {
   const questionTypeLabels = {
     all: 'Mixed Questions',
     technical: 'Technical Questions',
-    behavioral: 'Behavioral Questions'
+    behavioral: 'Behavioral Questions',
+    dsa: 'DSA Questions'
   };
 
   return (
@@ -91,21 +92,15 @@ export default function InterviewQuestionsGenerator() {
         {/* Header */}
        
         <div className="text-center mb-6 sm:mb-8">
-            
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            
             className="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-purple-100 mb-3"
           >
-            
             <Sparkles size={16} className="text-purple-400" />
-           
             <span className="text-sm font-medium bg-gradient-to-r from-teal-500 to-purple-400 bg-clip-text text-transparent">
-              
               AI-Powered Interview Prep
-              
             </span>
             <div><SparklesText text={''} /></div>
           </motion.div>
@@ -116,9 +111,7 @@ export default function InterviewQuestionsGenerator() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r from-teal-500 to-purple-500 bg-clip-text text-transparent"
           >
-            
-           
-           Interview Questions Generator
+            Interview Questions Generator
           </motion.h1>
           
           <motion.p
@@ -168,18 +161,38 @@ export default function InterviewQuestionsGenerator() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Question Type
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {['all', 'technical', 'behavioral'].map((type) => (
+                  <div className="grid grid-cols-4 gap-2">
+                    {['all', 'technical', 'behavioral', 'dsa'].map((type) => (
                       <button
                         key={type}
                         type="button"
                         onClick={() => setQuestionType(type)}
-                        className={`py-2 sm:py-2.5 px-2 sm:px-4 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                        className={`py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition-all flex flex-col items-center justify-center gap-1 ${
                           questionType === type 
                           ? 'bg-gradient-to-r from-teal-500 to-purple-400 text-white shadow-md' 
                           : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                         }`}
                       >
+                        {type === 'all' && (
+                          <div className="h-4 w-4 flex items-center justify-center">
+                            <Sparkles size={16} className={questionType === type ? 'text-white' : 'text-gray-500'} />
+                          </div>
+                        )}
+                        {type === 'technical' && (
+                          <div className="h-4 w-4 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M16 18 22 12 16 6"></path><path d="M8 6 2 12 8 18"></path></svg>
+                          </div>
+                        )}
+                        {type === 'behavioral' && (
+                          <div className="h-4 w-4 flex items-center justify-center">
+                            <MessageSquare size={16} className={questionType === type ? 'text-white' : 'text-gray-500'} />
+                          </div>
+                        )}
+                        {type === 'dsa' && (
+                          <div className="h-4 w-4 flex items-center justify-center">
+                            <Code size={16} className={questionType === type ? 'text-white' : 'text-gray-500'} />
+                          </div>
+                        )}
                         {type.charAt(0).toUpperCase() + type.slice(1)}
                       </button>
                     ))}

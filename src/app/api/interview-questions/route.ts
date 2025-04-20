@@ -53,6 +53,10 @@ function constructPrompt(role: string, questionType: string): string {
     case 'behavioral':
       promptBase += ' Focus only on behavioral and situational questions that assess soft skills, problem-solving approach, teamwork, and cultural fit.';
       break;
+    case 'dsa':
+      promptBase += ' Focus only on Data Structures and Algorithms (DSA) questions that are commonly asked for this role. Include algorithm problems, coding challenges, time/space complexity analyses, and optimization techniques relevant to this position.';
+      promptBase += ' For each DSA question, provide a clear problem statement, example inputs/outputs if applicable, and a detailed solution with code snippets and explanation of the approach.';
+      break;
     default:
       promptBase += ' Include a balanced mix of both technical questions about required skills and behavioral questions that assess problem-solving and cultural fit.';
   }
@@ -82,7 +86,7 @@ async function fetchQuestionsFromGroq(prompt: string): Promise<QuestionWithAnswe
       messages: [
         {
           role: 'system',
-          content: 'You are an AI assistant specialized in generating relevant interview questions and high-quality suggested answers for various job roles. Your responses should be specific, concise, and focused on real interview scenarios for the requested role. Output must be in valid JSON format.'
+          content: 'You are an AI assistant specialized in generating relevant interview questions and high-quality suggested answers for various job roles. Your responses should be specific, concise, and focused on real interview scenarios for the requested role. When generating DSA questions, include clear problem statements, expected inputs/outputs, and detailed algorithm explanations with code samples. Output must be in valid JSON format.'
         },
         {
           role: 'user',
@@ -132,7 +136,7 @@ function parseQuestionsManually(content: string): QuestionWithAnswer[] {
   
   if (questionBlocks.length > 0) {
     for (const block of questionBlocks) {
-      const parts = block.split(/\n+Answer:|\n+Suggested Answer:|\n+Response:/i);
+      const parts = block.split(/\n+Answer:|\n+Suggested Answer:|\n+Response:|\n+Solution:/i);
       
       if (parts.length >= 2) {
         const question = parts[0].trim();
