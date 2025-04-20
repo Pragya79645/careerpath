@@ -231,12 +231,9 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 h-14 px-8 text-lg"
-              >
-                Get Started For Free
-              </Button>
+              <div className="container mx-auto px-4 md:px-6 lg:px-8 text-center text-gray-500 text-sm">
+          <p>© 2025 PathPILOT. All rights reserved.</p>
+        </div> 
             </motion.div>
           </div>
         </div>
