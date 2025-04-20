@@ -147,7 +147,7 @@ export default function Home() {
           >
           <div><SparklesText text={"About US"} /></div>
             <p className="text-muted-foreground max-w-2xl mx-auto mt-8 font-bold text-xl">
-              Discover the hottest career paths that match your skills and interests
+              Discover the best career paths that match your skills and interests
             </p>
           </motion.div>
 

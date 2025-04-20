@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useRef, useEffect, SetStateAction } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { ArrowDownCircle, Share2, BookOpen, Clock, Search, Download, ChevronRight } from "lucide-react";
+import { ArrowDownCircle, BookOpen, Clock, Search, ChevronRight, 
+         BookMarked, Award, Briefcase, Sparkles } from "lucide-react";
 
 export default function TargetCompanyRoadmap() {
   const [company, setCompany] = useState('');
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);
   const [roadmap, setRoadmap] = useState('');
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState(null);
   const [error, setError] = useState(null);
-  const roadmapRef = useRef<HTMLDivElement>(null);
+  const roadmapRef = useRef(null);
   const [estimatedReadTime, setEstimatedReadTime] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Calculate reading time when roadmap changes
   useEffect(() => {
     if (roadmap) {
-      // Average reading speed: 200 words per minute
       const words = roadmap.trim().split(/\s+/).length;
       const minutes = Math.ceil(words / 200);
       setEstimatedReadTime(`${minutes} min read`);
@@ -80,15 +80,8 @@ export default function TargetCompanyRoadmap() {
         })
     : [];
 
-  const scrollToSection = (section: string | null) => {
-      setActiveSection(section);
-    if (typeof section === 'string') {
-      const element = document.getElementById(section.replace(/\s+/g, '-').toLowerCase());
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-    // Ensure the section exists before scrolling
+  const scrollToSection = (section) => {
+    setActiveSection(section);
     if (typeof section === 'string') {
       const element = document.getElementById(section.replace(/\s+/g, '-').toLowerCase());
       if (element) {
@@ -97,13 +90,9 @@ export default function TargetCompanyRoadmap() {
     }
   };
 
- 
-
- 
-
   // Custom renderer for ReactMarkdown
   const customRenderers = {
-    h2: (({ children }: { children: React.ReactNode }) => {
+    h2: (({ children }) => {
       const text = children ? children.toString() : '';
       const match = text.match(/\d+\.\s*(.*)/);
       const sectionTitle = match ? match[1] : text;
@@ -112,20 +101,20 @@ export default function TargetCompanyRoadmap() {
       return (
         <h2 
           id={id} 
-          className="text-2xl font-bold text-violet-800 mt-10 mb-6 pb-3 border-b border-violet-100"
+          className="text-2xl font-bold text-indigo-700 mt-10 mb-6 pb-3 border-b border-indigo-100"
         >
           {text}
         </h2>
       );
-    }) as React.FC,
-    ul: (({ children }: { children: React.ReactNode }) => (
+    }),
+    ul: (({ children }) => (
       <ul className="list-disc ml-6 my-5 space-y-3">
         {children}
       </ul>
-    )) as React.FC,
-    li: (({ children }: { children: React.ReactNode }) => (
+    )),
+    li: (({ children }) => (
       <li className="text-gray-700">{children}</li>
-    )) as React.FC,
+    )),
   };
 
   const toggleSidebar = () => {
@@ -133,137 +122,187 @@ export default function TargetCompanyRoadmap() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-10 bg-gray-50 min-h-screen">
-      <div className="text-center space-y-3">
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600">
-          Target Your Dream Company
-        </h1>
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          Get a personalized roadmap with actionable steps to land your ideal role
-        </p>
-      </div>
-
-      <div className="bg-white shadow-xl rounded-2xl p-8 space-y-8 border border-gray-100">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <label htmlFor="company" className="block text-lg font-medium text-gray-700  items-center">
-              <Search className="h-5 w-5 mr-2 text-violet-500" />
-              Target Company
-            </label>
-            <input
-              id="company"
-              className="w-full p-4 text-lg border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all"
-              placeholder="e.g., Google, Microsoft, Amazon"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-            />
-          </div>
-
-          <div className="space-y-3">
-            <label htmlFor="role" className="block text-lg font-medium text-gray-700  items-center">
-              <BookOpen className="h-5 w-5 mr-2 text-violet-500" />
-              Target Role
-            </label>
-            <input
-              id="role"
-              className="w-full p-4 text-lg border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition-all"
-              placeholder="e.g., Software Engineer, Product Manager"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            />
+    <div className="bg-gray-50 min-h-screen w-full">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-purple-500 to-teal-500 text-white py-16 w-full">
+        <div className="container mx-auto px-4 md:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <div className="md:w-2/3 space-y-6">
+              <h1 className="text-4xl md:text-5xl font-bold">
+                Land Your <span className="text-indigo-200">Dream Role</span>
+              </h1>
+              <p className="text-xl text-indigo-100 leading-relaxed">
+                Get a personalized roadmap with actionable steps to help you secure your ideal position at top companies.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center">
+                  <Sparkles className="h-5 w-5 mr-2 text-indigo-200" />
+                  <span className="text-indigo-100">Expert Insights</span>
+                </div>
+                <div className="flex items-center">
+                  <Award className="h-5 w-5 mr-2 text-indigo-200" />
+                  <span className="text-indigo-100">Tailored Steps</span>
+                </div>
+              </div>
+            </div>
+            <div className="md:w-1/3 mt-8 md:mt-0 flex justify-center md:justify-end">
+              <div className="relative w-48 h-48 md:w-56 md:h-56">
+                <div className="absolute inset-0 bg-indigo-400 rounded-full opacity-20 blur-3xl"></div>
+                <div className="absolute inset-4 bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 shadow-xl"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Briefcase className="h-14 w-14 md:h-16 md:w-16 text-white/80" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <button
-          onClick={handleSubmit}
-          disabled={loading || !company.trim() || !role.trim()}
-          className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-lg font-medium py-4 px-6 rounded-xl transition duration-300 shadow-lg shadow-violet-200 flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Creating Your Personalized Roadmap...
-            </>
-          ) : (
-            <>
-              <ArrowDownCircle className="mr-2 h-5 w-5" />
-              Generate Career Roadmap
-            </>
-          )}
-        </button>
-        
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg text-red-700">
-            <p>{error}</p>
-          </div>
-        )}
       </div>
 
-      {roadmap && (
-        <div ref={roadmapRef} className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-6">
-            <h2 className="text-2xl font-bold text-white flex items-center">
-              {role} at {company}: Career Roadmap
-            </h2>
-            <div className="flex items-center text-white/80 text-sm mt-3 space-x-4">
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-2" />
-                <span>{estimatedReadTime}</span>
-              </div>
-              <div className="flex items-center">
-                <BookOpen className="h-4 w-4 mr-2" />
-                <span>{tableOfContents.length} sections</span>
-              </div>
+      {/* Input Form */}
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 -mt-12">
+        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">Generate Your Career Roadmap</h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label htmlFor="company" className="flex items-center text-gray-700 font-medium">
+                <Search className="h-4 w-4 mr-2 text-indigo-500" />
+                Target Company
+              </label>
+              <input
+                id="company"
+                className="w-full p-3.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all"
+                placeholder="e.g., Google, Microsoft, Amazon"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
             </div>
-            
-            <div className="flex mt-4 space-x-3">
-             
-              <button 
-                onClick={toggleSidebar} 
-                className="md:hidden bg-white/20 hover:bg-white/30 text-white rounded-lg py-1.5 px-3 text-sm flex items-center transition-colors"
-              >
-                <ChevronRight className={`h-4 w-4 mr-1.5 transition-transform ${sidebarOpen ? 'rotate-90' : ''}`} />
-                {sidebarOpen ? 'Hide' : 'Show'} Sections
-              </button>
+
+            <div className="space-y-3">
+              <label htmlFor="role" className="flex items-center text-gray-700 font-medium">
+                <BookMarked className="h-4 w-4 mr-2 text-indigo-500" />
+                Target Role
+              </label>
+              <input
+                id="role"
+                className="w-full p-3.5 text-gray-700 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition-all"
+                placeholder="e.g., Software Engineer, Product Manager"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              />
             </div>
           </div>
+
+          <button
+            onClick={handleSubmit}
+            disabled={loading || !company.trim() || !role.trim()}
+            className="mt-6 px-6 py-2 font-medium bg-indigo-400 text-white w-fit transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]"
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Creating Your Roadmap...
+              </>
+            ) : (
+              <>
+                <ArrowDownCircle className="mr-2 h-5 w-5" />
+                Generate Career Roadmap
+              </>
+            )}
+          </button>
           
-          <div className="flex flex-col md:flex-row">
-            {/* Table of Contents Sidebar - Hidden on mobile unless toggled */}
-            <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block md:w-72 bg-violet-50 p-5 md:p-6 lg:p-8 md:shrink-0 border-r border-violet-100`}>
-              <h3 className="font-semibold text-violet-800 mb-4 text-lg">Contents</h3>
-              <nav className="space-y-2">
-                {tableOfContents.map((section, index) => (
-                  <button
-                    key={index}
-                    onClick={() => scrollToSection(section)}
-                    className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all ${
-                      activeSection === section
-                        ? 'bg-violet-100 text-violet-800 font-medium shadow-sm'
-                        : 'text-gray-600 hover:bg-violet-50 hover:text-violet-800'
-                    }`}
-                  >
-                    <span className="inline-flex h-6 w-6 bg-violet-200 rounded-2xl text-violet-800 text-xs font-semibold items-center justify-center ">
-                      {index + 1}
-                    </span>
-                    {section}
-                  </button>
-                ))}
-              </nav>
+          {error && (
+            <div className="mt-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg text-red-700">
+              <p>{error}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Roadmap Results */}
+      {roadmap && (
+        <div ref={roadmapRef} className="container mx-auto px-4 md:px-6 lg:px-8 py-12">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    {role} at {company}
+                  </h2>
+                  <div className="flex items-center flex-wrap gap-4 text-white/80 text-sm mt-2">
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 mr-2" />
+                      <span>{estimatedReadTime}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      <span>{tableOfContents.length} sections</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={toggleSidebar} 
+                  className="md:hidden mt-4 md:mt-0 bg-white/20 hover:bg-white/30 text-white rounded-lg py-1.5 px-3 text-sm flex items-center transition-colors"
+                >
+                  <ChevronRight className={`h-4 w-4 mr-1.5 transition-transform ${sidebarOpen ? 'rotate-90' : ''}`} />
+                  {sidebarOpen ? 'Hide' : 'Show'} Sections
+                </button>
+              </div>
             </div>
             
-            {/* Main Content */}
-            <div className="flex-1 p-6 lg:p-8 overflow-auto">
-              <div className="prose prose-violet prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-headings:text-violet-900 prose-a:text-violet-600 max-w-none">
-                <ReactMarkdown components={customRenderers}>{roadmap}</ReactMarkdown>
+            {/* Content Area */}
+            <div className="flex flex-col md:flex-row">
+              {/* Table of Contents Sidebar */}
+              <div 
+                className={`${
+                  sidebarOpen ? 'block' : 'hidden'
+                } md:block md:w-72 bg-gray-50 p-5 md:p-6 md:shrink-0 border-r border-gray-100`}
+              >
+                <h3 className="font-semibold text-gray-900 mb-4 text-lg">Contents</h3>
+                <nav className="space-y-2">
+                  {tableOfContents.map((section, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollToSection(section)}
+                      className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all ${
+                        activeSection === section
+                          ? 'bg-indigo-100 text-indigo-800 font-medium shadow-sm'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-indigo-600'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <span className="inline-flex h-6 w-6 bg-indigo-100 rounded-full text-indigo-600 text-xs font-semibold items-center justify-center mr-2">
+                          {index + 1}
+                        </span>
+                        <span className="truncate">{section}</span>
+                      </div>
+                    </button>
+                  ))}
+                </nav>
+              </div>
+              
+              {/* Main Content */}
+              <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-auto">
+                <div className="prose prose-indigo prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-headings:text-indigo-900 prose-a:text-indigo-600 max-w-none">
+                  <ReactMarkdown components={customRenderers}>{roadmap}</ReactMarkdown>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
+      
+      {/* Footer */}
+      <footer className="bg-gray-100 border-t border-gray-200 py-8 mt-10 md:mt-20 w-full">
+        <div className="container mx-auto px-4 md:px-6 lg:px-8 text-center text-gray-500 text-sm">
+          <p>© 2025 PathPILOT. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
