@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, LayoutDashboard, FileText, Mic, Map, LogIn, Menu, X } from "lucide-react"
+import { Home, LayoutDashboard, FileText, Mic, Map, LogIn, Menu, X, BookOpen, Briefcase, Lightbulb, Target } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 import {
@@ -31,24 +31,31 @@ const items = [
   },
   
   {
+    title: "Resume Analyzer",
+    url: "/resume",
+    icon: FileText,
+  },
+
+  {
     title: "Company Targeted",
     url: "/company-target",
-    icon: Home,
+    icon: Target,
   },
   {
     title: "Prep For Your Interview",
     url: "/interview-questions",
     icon: LayoutDashboard,
   },
-  {
-    title: "Resume Analyzer",
-    url: "/resume",
-    icon: FileText,
-  },
+ 
   {
     title: "Ask Groq",
     url: "/askGroq",
     icon: Mic,
+  },
+  {
+    title: "Career Councselor",
+    url: "/counselor",
+    icon: Lightbulb,
   },
 
   {
