@@ -82,7 +82,11 @@ export default function ChatPage() {
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-500">
             Groq Career Chatbot
           </h1>
+          
           <div className="h-1 w-24 bg-gradient-to-r from-teal-400 to-purple-500 mx-auto mt-2 rounded-full"></div>
+          <p className="text-xl text-indigo-100 leading-relaxed mt-2">
+                Get Instant Answers to all your Career Queries
+              </p>
         </div>
         
         {/* Chat container */}

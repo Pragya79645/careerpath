@@ -161,7 +161,9 @@ export default function TargetCompanyRoadmap() {
       {/* Input Form */}
       <div className="container mx-auto px-4 md:px-6 lg:px-8 -mt-12">
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Generate Your Career Roadmap</h2>
+        <span className="bg-gradient-to-r from-purple-400 via-teal-400 to-blue-500 bg-clip-text text-transparent font-bold text-2xl mb-2">
+                 Generate Your Career Roadmap
+                </span>
           
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-3">

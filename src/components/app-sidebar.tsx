@@ -32,7 +32,7 @@ const items = [
   
   {
     title: "Resume Analyzer",
-    url: "/resume",
+    url: "/resume-analyzer",
     icon: FileText,
   },
 
