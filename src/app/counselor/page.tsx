@@ -227,7 +227,7 @@ export default function CareerCounselor() {
           </div>
           <button
             onClick={archiveAndClearChat}
-            className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full flex items-center space-x-2 transition-all backdrop-blur-sm border border-white/20"
+            className="bg-teal-600 hover:bg-white/20 text-white px-4 py-2 rounded-full flex items-center space-x-2 transition-all backdrop-blur-sm border border-white/20"
           >
             <MessageSquare className="h-4 w-4" />
             <span>Start New Chat</span>
@@ -247,7 +247,7 @@ export default function CareerCounselor() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-purple-800 tracking-tight">Career Intelligence</h2>
-                <p className="text-gray-600 text-sm">Powered by advanced AI to guide your professional growth</p>
+                <p className="text-gray-600 text-sm"><span className="font-bold text-teal-800">"Discover, Plan, Achieve</span>- Career Councelling that helps you identify growth opportunities and guide your journey"</p>
               </div>
             </div>
 
@@ -257,7 +257,7 @@ export default function CareerCounselor() {
                   <div className="inline-flex items-center justify-center p-4 bg-purple-50 rounded-full mb-4">
                     <Lightbulb className="h-8 w-8 text-purple-600" />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-700 mb-2">Start Your Career Conversation</h3>
+                  <h3 className="text-lg  text-gray-700 mb-2 font-bold">Start Your Career Conversation</h3>
                   <p className="text-gray-500 max-w-md mx-auto">
                     Ask about career paths, skill development, interview preparation, or any professional guidance you
                     need.
@@ -440,7 +440,7 @@ export default function CareerCounselor() {
             </div>
             <h3 className="ml-3 text-xl font-bold tracking-tight">Career Compass</h3>
           </div>
-          <p className="mb-2">© {new Date().getFullYear()} Career Compass | Personalized career guidance</p>
+          <p className="mb-2">© {new Date().getFullYear()}  PathPILOT | Personalized career guidance</p>
           <p className="text-xs text-purple-200 max-w-md mx-auto">
             Powered by advanced AI technology to help you navigate your professional journey with confidence and clarity
           </p>
