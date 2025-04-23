@@ -141,8 +141,8 @@ export default function ChatPage() {
                   <span className="inline-block w-2 h-2 rounded-full bg-teal-500 mr-1"></span>
                   System online
                 </span>
-                <span className="mx-2">•</span>
-                <span>Powered by LLM</span>
+              
+               
               </div>
             </div>
           </div>
@@ -150,11 +150,11 @@ export default function ChatPage() {
           <div className="hidden md:flex items-center space-x-2 text-sm text-gray-400">
             <div className="flex items-center px-3 py-1 rounded-md bg-gray-800 border border-gray-700">
               <Code size={14} className="mr-2" />
-              <span>Groq Engine v2.1</span>
+            
             </div>
             <div className="flex items-center px-3 py-1 rounded-md bg-gray-800 border border-gray-700">
               <Zap size={14} className="mr-2" />
-              <span>Low latency</span>
+           
             </div>
           </div>
         </header>
@@ -174,7 +174,7 @@ export default function ChatPage() {
               
               <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
                 {[
-                  { icon: <Code size={16} />, text: "Resume optimization tips" },
+                  { icon: <Code size={16} />, text: "Web Development Guidance" },
                   { icon: <User size={16} />, text: "Interview preparation" },
                   { icon: <ChevronDown size={16} />, text: "Salary negotiation" },
                   { icon: <AlertCircle size={16} />, text: "Industry trends" }

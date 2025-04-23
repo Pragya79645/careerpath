@@ -53,7 +53,7 @@ const items = [
     icon: Mic,
   },
   {
-    title: "Career Councselor",
+    title: "Career Counselor",
     url: "/counselor",
     icon: Lightbulb,
   },
