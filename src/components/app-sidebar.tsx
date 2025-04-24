@@ -117,7 +117,7 @@ export function AppSidebar() {
                       className={`transition-all duration-300 ${
                         pathname === item.url
                           ? "bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text font-medium text-transparent"
-                          : "text-gray-700 group-hover:text-indigo-500 dark:text-gray-300"
+                          : "text-black group-hover:text-indigo-500 dark:text-black"
                       }`}
                     >
                       {item.title}
