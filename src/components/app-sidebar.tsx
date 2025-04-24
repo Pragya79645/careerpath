@@ -72,12 +72,14 @@ export function AppSidebar() {
 
   return (
     <>
-      <div className="fixed left-3 top-3 z-50 md:hidden">
-        <SidebarTrigger className="bg-teal-300/30 backdrop-blur-md transition-all duration-300 hover:bg-teal-400/40 hover:shadow-lg hover:shadow-indigo-500/30" />
+      <div className="fixed left-3 top-8 z-50 md:hidden">
+        <SidebarTrigger 
+          className="bg-indigo-500/70 text-white backdrop-blur-md transition-all duration-300 hover:bg-indigo-600/80 hover:shadow-lg hover:shadow-indigo-500/30" 
+        />
       </div>
       <Sidebar
         variant="floating"
-        className="border-r border-indigo-200/30 bg-gradient-to-b from-indigo-50/90 to-indigo-100/80 backdrop-blur-md transition-all duration-300 dark:from-indigo-950/90 dark:to-indigo-900/80"
+        className="border-r border-indigo-300/60 bg-white dark:bg-indigo-950 transition-all duration-300"
       >
         <SidebarHeader className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
@@ -101,7 +103,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.url}
                   tooltip={item.title}
-                  className="group my-1 rounded-md transition-all duration-300 hover:bg-indigo-300/20 hover:shadow-sm dark:hover:bg-indigo-800/30"
+                  className="group my-1 rounded-md transition-all duration-300 hover:bg-indigo-100 dark:hover:bg-indigo-800/60 hover:shadow-sm"
                 >
                   <a href={item.url} className="flex items-center gap-3 px-3 py-2">
                     <item.icon
