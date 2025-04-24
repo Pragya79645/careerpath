@@ -1,3 +1,10 @@
+let userConfig = undefined
+try {
+  userConfig = await import('./v0-user-next.config')
+} catch (e) {
+  // ignore error
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -9,46 +16,33 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  async headers() {
-    return [
-      {
-        source: "/uploads/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
+  experimental: {
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Client-side configuration
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        stream: false,
-        zlib: false,
-        crypto: false,
-      };
+}
+
+mergeConfig(nextConfig, userConfig)
+
+function mergeConfig(nextConfig, userConfig) {
+  if (!userConfig) {
+    return
+  }
+
+  for (const key in userConfig) {
+    if (
+      typeof nextConfig[key] === 'object' &&
+      !Array.isArray(nextConfig[key])
+    ) {
+      nextConfig[key] = {
+        ...nextConfig[key],
+        ...userConfig[key],
+      }
+    } else {
+      nextConfig[key] = userConfig[key]
     }
+  }
+}
 
-    // Common configuration for both client and server
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      canvas: false,
-      encoding: false,
-    };
-
-    // Disable font loading for PDFKit
-    config.module.rules.push({
-      test: /\.(afm|ttf|woff|woff2)$/,
-      use: "null-loader",
-    });
-
-    return config;
-  },
-};
-
-export default nextConfig;
+export default nextConfig
