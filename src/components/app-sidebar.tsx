@@ -109,8 +109,8 @@ export function AppSidebar() {
                     <item.icon
                       className={`h-5 w-5 transition-all duration-300 ${
                         pathname === item.url
-                          ? "text-indigo-600 dark:text-indigo-400"
-                          : "text-black group-hover:text-indigo-500 dark:text-black"
+                          ? "text-indigo-600 dark:text-indigo-400 font-bold"
+                          : "text-black group-hover:text-indigo-500 dark:text-black font-bold"
                       }`}
                     />
                     <span
