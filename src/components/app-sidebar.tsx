@@ -92,7 +92,7 @@ export function AppSidebar() {
             </div>
           </div>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpenMobile(false)}>
-            {openMobile ? <X className="h-5 w-5 text-indigo-500" /> : <Menu className="h-5 w-5 text-indigo-500" />}
+            {openMobile ? <X className="h-5 w-5 text-indigo-600" /> : <Menu className="h-5 w-5 text-indigo-500" />}
           </Button>
         </SidebarHeader>
         <SidebarContent>
@@ -110,7 +110,7 @@ export function AppSidebar() {
                       className={`h-5 w-5 transition-all duration-300 ${
                         pathname === item.url
                           ? "text-indigo-600 dark:text-indigo-400"
-                          : "text-gray-600 group-hover:text-indigo-500 dark:text-gray-300"
+                          : "text-black group-hover:text-indigo-500 dark:text-black"
                       }`}
                     />
                     <span
