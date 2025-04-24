@@ -422,26 +422,7 @@ type CardType = {
 }
 
 const DEFAULT_CARDS: CardType[] = [
-  {
-    title: "Research user needs",
-    id: "1",
-    column: "backlog",
-  },
-  {
-    title: "Create wireframes",
-    id: "2",
-    column: "todo",
-  },
-  {
-    title: "Design UI components",
-    id: "3",
-    column: "doing",
-  },
-  {
-    title: "Write documentation",
-    id: "4",
-    column: "done",
-  },
+  
 ]
 
 export default CustomKanban
