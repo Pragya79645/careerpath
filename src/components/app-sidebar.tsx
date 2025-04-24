@@ -73,7 +73,7 @@ export function AppSidebar() {
   return (
     <>
       <div className="fixed left-3 top-3 z-50 md:hidden">
-        <SidebarTrigger className="bg-indigo-300/30 backdrop-blur-md transition-all duration-300 hover:bg-teal-400/40 hover:shadow-lg hover:shadow-indigo-500/30" />
+        <SidebarTrigger className="bg-teal-300/30 backdrop-blur-md transition-all duration-300 hover:bg-teal-400/40 hover:shadow-lg hover:shadow-indigo-500/30" />
       </div>
       <Sidebar
         variant="floating"
