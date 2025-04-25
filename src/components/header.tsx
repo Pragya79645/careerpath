@@ -107,7 +107,7 @@ const TransparentNavbar = () => {
                 <Link
                   key={item.title}
                   href={item.url}
-                  className="flex items-center text-black hover:text-[#3DEFE9] transition-colors duration-300  text-base font-bold"
+                  className="flex items-center text-black hover:text-[#3DEFE9] transition-colors duration-300  text-sm font-bold"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: -20 }}
