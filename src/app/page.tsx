@@ -99,16 +99,7 @@ export default function Home() {
                   </span>
                   <span className="absolute "></span>
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="group relative overflow-hidden border-purple-500 hover:border-purple-600 transition-all duration-300 h-14 px-0 text-lg"
-                >
-                  <span className=" z-10 flex items-center">
-                    <Example />
-                  </span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                </Button>
+           
               </motion.div>
             </motion.div>
           
