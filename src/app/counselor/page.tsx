@@ -215,7 +215,7 @@ export default function CareerCounselor() {
   `
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white mt-22">
       <style jsx>{customScrollbarStyles}</style>
       <header className="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 px-6 shadow-lg sticky top-0 z-20">
         <div className="container mx-auto flex items-center justify-between">

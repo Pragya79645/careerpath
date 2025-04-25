@@ -6,7 +6,7 @@ import { FaTrash } from "react-icons/fa"
 
 export const CustomKanban = () => {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-purple-50 to-white text-neutral-800">
+    <div className="min-h-screen w-full bg-gradient-to-b from-purple-50 to-white text-neutral-800 mt-16">
       {/* Hero Section */}
       <div className="w-full bg-gradient-to-r from-purple-400 to-teal-400 py-8 px-4 text-center text-white shadow-md sm:py-16">
         <div className="mx-auto w-full">

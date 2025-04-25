@@ -127,7 +127,7 @@ export default function ChatPage() {
         <CircuitPattern />
         
         {/* Header */}
-        <header className="px-6 py-4 border-b border-gray-800 bg-gray-900 flex items-center justify-between relative z-10">
+        <header className="px-6 py-4 border-b border-gray-800 bg-gray-900 flex items-center justify-between relative z-10 mt-16">
           <div className="flex items-center space-x-3">
             <div className="flex items-center justify-center w-8 h-8 rounded-md bg-gradient-to-r from-teal-500 to-teal-600">
               <Terminal size={16} />
