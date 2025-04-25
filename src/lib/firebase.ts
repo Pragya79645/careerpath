@@ -5,6 +5,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAxm7qtwA-HnVlbNa0nbvkJ2GVDku38VIQ",
   authDomain: "careerpathnavigator-8783c.firebaseapp.com",
@@ -17,12 +18,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-let analytics;
+let analytics = null
 if (typeof window !== "undefined") {
-  analytics = getAnalytics(app);
+  analytics = getAnalytics(app)
 }
 
-const firestore = getFirestore(app);
-const auth = getAuth(app);
+// Initialize Firestore and Auth
+const db = getFirestore(app)
+const auth = getAuth(app)
 
-export { app, analytics, firestore, auth };
+export { app, analytics, db, auth }
