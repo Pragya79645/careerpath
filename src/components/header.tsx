@@ -58,7 +58,7 @@ const TransparentNavbar = () => {
             icon: Lightbulb,
         },
         {
-            title: "Workflow",
+            title: "Workflow Manager",
             url: "/WorkflowManager",
             icon: Map,
         },
