@@ -4,8 +4,9 @@ import { FiPlus } from "react-icons/fi"
 import { motion } from "framer-motion"
 import { FaTrash } from "react-icons/fa"
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc, query, where } from "firebase/firestore"
-import { getAuth, onAuthStateChanged, User } from "firebase/auth"
+import { getFirestore, collection, doc, setDoc, onSnapshot, deleteDoc } from "firebase/firestore"
+import { getAuth, onAuthStateChanged, type User } from "firebase/auth"
+import type React from "react"
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "careerpathnavigator-8783c.firebasestorage.app",
   messagingSenderId: "411185912011",
   appId: "1:411185912011:web:03fb1b13a0aae0fe33634e",
-  measurementId: "G-F14VF8W9RJ"
+  measurementId: "G-F14VF8W9RJ",
 }
 
 // Initialize Firebase
@@ -89,13 +90,13 @@ const Board = ({ userId }: { userId: string }) => {
   useEffect(() => {
     // Subscribe to real-time updates for this user's cards
     const userTasksRef = collection(db, "users", userId, "tasks")
-    
+
     const unsubscribe = onSnapshot(userTasksRef, (snapshot) => {
       const updatedCards: CardType[] = []
       snapshot.forEach((doc) => {
         updatedCards.push({
           id: doc.id,
-          ...doc.data() as Omit<CardType, 'id'>
+          ...(doc.data() as Omit<CardType, "id">),
         })
       })
       setCards(updatedCards)
@@ -110,17 +111,12 @@ const Board = ({ userId }: { userId: string }) => {
     try {
       // Handle card updates
       for (const card of updatedCards) {
-        await setDoc(
-          doc(db, "users", userId, "tasks", card.id),
-          { title: card.title, column: card.column }
-        )
+        await setDoc(doc(db, "users", userId, "tasks", card.id), { title: card.title, column: card.column })
       }
-      
+
       // Check for deleted cards
-      const deletedCards = cards.filter(
-        oldCard => !updatedCards.some(newCard => newCard.id === oldCard.id)
-      )
-      
+      const deletedCards = cards.filter((oldCard) => !updatedCards.some((newCard) => newCard.id === oldCard.id))
+
       // Delete removed cards from Firebase
       for (const card of deletedCards) {
         await deleteDoc(doc(db, "users", userId, "tasks", card.id))
@@ -132,8 +128,8 @@ const Board = ({ userId }: { userId: string }) => {
 
   // Custom setCards function that also updates Firebase
   const setCardsWithFirebase = (newCards: CardType[] | ((prev: CardType[]) => CardType[])) => {
-    setCards(prevCards => {
-      const updatedCards = typeof newCards === 'function' ? newCards(prevCards) : newCards
+    setCards((prevCards) => {
+      const updatedCards = typeof newCards === "function" ? newCards(prevCards) : newCards
       updateCardsInFirebase(updatedCards)
       return updatedCards
     })
@@ -182,6 +178,18 @@ type ColumnProps = {
 
 const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) => {
   const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    const handleDeleteCard = (e: Event) => {
+      const { id } = (e as CustomEvent).detail
+      setCards((prev) => prev.filter((card) => card.id !== id))
+    }
+
+    document.addEventListener("deleteCard", handleDeleteCard)
+    return () => {
+      document.removeEventListener("deleteCard", handleDeleteCard)
+    }
+  }, [setCards])
 
   const handleDragStart = (e: DragEvent, card: CardType) => {
     e.dataTransfer.setData("cardId", card.id)
@@ -309,6 +317,13 @@ type CardProps = CardType & {
 }
 
 const Card = ({ title, id, column, handleDragStart }: CardProps) => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    // Get the setCards function from the parent component using a custom event
+    const event = new CustomEvent("deleteCard", { detail: { id } })
+    document.dispatchEvent(event)
+  }
+
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -317,9 +332,16 @@ const Card = ({ title, id, column, handleDragStart }: CardProps) => {
         layoutId={id}
         draggable="true"
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
-        className="cursor-grab rounded-lg border border-neutral-200 bg-white p-3 shadow-sm hover:shadow-md active:cursor-grabbing w-full"
+        className="cursor-grab rounded-lg border border-neutral-200 bg-white p-3 shadow-sm hover:shadow-md active:cursor-grabbing w-full relative group"
       >
-        <p className="text-sm text-neutral-700 break-words">{title}</p>
+        <p className="text-sm text-neutral-700 break-words pr-6">{title}</p>
+        <button
+          onClick={handleDelete}
+          className="absolute right-2 top-2 text-neutral-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 md:opacity-0 focus:opacity-100"
+          aria-label="Delete card"
+        >
+          <FaTrash size={14} />
+        </button>
       </motion.div>
     </>
   )
@@ -483,13 +505,25 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
     <>
       {adding ? (
         <motion.form layout onSubmit={handleSubmit}>
-          <textarea
-            onChange={(e) => setText(e.target.value)}
-            value={text}
-            autoFocus
-            placeholder="Add new task..."
-            className="w-full rounded-lg border border-purple-400 bg-purple-50 p-2 text-sm text-neutral-700 placeholder-purple-300 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
-          />
+          <div className="relative w-full">
+            <textarea
+              onChange={(e) => setText(e.target.value)}
+              value={text}
+              autoFocus
+              placeholder="Add new task..."
+              className="w-full rounded-lg border border-purple-400 bg-purple-50 p-2 text-sm text-neutral-700 placeholder-purple-300 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+            />
+            {text.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setText("")}
+                className="absolute right-2 top-2 text-neutral-400 hover:text-red-500 transition-colors"
+                aria-label="Clear input"
+              >
+                <FaTrash size={14} />
+              </button>
+            )}
+          </div>
           <div className="mt-2 flex items-center justify-end gap-2">
             <button
               type="button"
