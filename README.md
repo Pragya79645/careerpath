@@ -127,13 +127,19 @@ Environment Setup
 1. Create a .env.local file in the root directory with the folllowing variables-
    Groq_API_KEY=""
 
-The Firebase app is initialized in the 'firebase.ts' file located inside the lib folder.  
+ The Firebase app is initialized in the 'firebase.ts' file located inside the lib folder.  
  apiKey: "",
+ 
  authDomain: "",
+ 
  projectId: "",
+ 
  storageBucket: "",
+ 
  messagingSenderId: "",
+ 
  appId: "",
+ 
  measurementId: ""
  
 ---
