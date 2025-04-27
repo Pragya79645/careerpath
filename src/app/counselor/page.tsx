@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Send,
   Loader2,
@@ -21,7 +21,42 @@ import {
   Archive,
   Star,
   Clock,
+  Trash2,
 } from "lucide-react"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  query, 
+  where, 
+  getDocs,
+  doc,
+  deleteDoc,
+  updateDoc,
+  arrayUnion
+} from "firebase/firestore"
+import { initializeApp } from "firebase/app"
+
+// Your Firebase configuration
+// Replace these with your actual Firebase config
+
+// Firebase configuration
+const firebaseConfig = {
+  // Replace with your Firebase config
+  apiKey: "AIzaSyAxm7qtwA-HnVlbNa0nbvkJ2GVDku38VIQ",
+  authDomain: "careerpathnavigator-8783c.firebaseapp.com",
+  projectId: "careerpathnavigator-8783c",
+  storageBucket: "careerpathnavigator-8783c.firebasestorage.app",
+  messagingSenderId: "411185912011",
+  appId: "1:411185912011:web:03fb1b13a0aae0fe33634e",
+  measurementId: "G-F14VF8W9RJ"
+}
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+const auth = getAuth(app)
 
 export default function CareerCounselor() {
   const [question, setQuestion] = useState("")
@@ -32,6 +67,51 @@ export default function CareerCounselor() {
   >([])
   const [showArchive, setShowArchive] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [isLoadingChats, setIsLoadingChats] = useState(false)
+
+  // Listen for auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+      if (currentUser) {
+        // Load archived chats from Firebase when user logs in
+        loadArchivedChats(currentUser.uid)
+      } else {
+        // Clear archived chats when user logs out
+        setArchivedChats([])
+      }
+    })
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe()
+  }, [])
+
+  // Load archived chats from Firebase
+  const loadArchivedChats = async (userId: string) => {
+    setIsLoadingChats(true)
+    try {
+      const q = query(collection(db, "previous"), where("userId", "==", userId))
+      const querySnapshot = await getDocs(q)
+      
+      const chats = querySnapshot.docs.map(doc => {
+        const data = doc.data()
+        return {
+          id: doc.id,
+          date: data.date.toDate(),
+          preview: data.preview,
+          messages: data.messages,
+          userId: data.userId
+        }
+      })
+      
+      setArchivedChats(chats)
+    } catch (error) {
+      console.error("Error loading archived chats:", error)
+    } finally {
+      setIsLoadingChats(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -73,7 +153,7 @@ export default function CareerCounselor() {
     }
   }
 
-  function archiveAndClearChat() {
+  async function archiveAndClearChat() {
     if (chatHistory.length > 0) {
       // Create a preview from the first user message or first few characters
       const userMessage = chatHistory.find((msg) => msg.role === "user")?.content || ""
@@ -87,13 +167,56 @@ export default function CareerCounselor() {
         messages: [...chatHistory],
       }
 
-      // Add to archived chats
+      // Add to local archived chats
       setArchivedChats((prev) => [newArchivedChat, ...prev])
+
+      // If user is signed in, save to Firebase
+      if (user) {
+        try {
+          const chatData = {
+            userId: user.uid,
+            date: new Date(),
+            preview: preview || "Conversation",
+            messages: [...chatHistory]
+          }
+          
+          // Add to 'previous' collection
+          await addDoc(collection(db, "previous"), chatData)
+          
+          // Optionally update the user document in 'users' collection to reference this chat
+          // This creates a relation between users and their chats
+          const userRef = doc(db, "users", user.uid)
+          await updateDoc(userRef, {
+            previousChats: arrayUnion(newArchivedChat.id)
+          })
+          
+          // Refresh the archived chats from Firebase
+          loadArchivedChats(user.uid)
+        } catch (error) {
+          console.error("Error saving chat to Firebase:", error)
+        }
+      }
     }
 
     // Clear current chat
     setChatHistory([])
     setQuestion("")
+  }
+
+  async function deleteChat(chatId: string, e: React.MouseEvent) {
+    e.stopPropagation() // Prevent the chat from being restored when delete is clicked
+    
+    try {
+      if (user) {
+        // Delete from Firebase
+        await deleteDoc(doc(db, "previous", chatId))
+      }
+      
+      // Delete from local state
+      setArchivedChats((prev) => prev.filter((chat) => chat.id !== chatId))
+    } catch (error) {
+      console.error("Error deleting chat:", error)
+    }
   }
 
   function restoreChat(chatId: string) {
@@ -109,8 +232,11 @@ export default function CareerCounselor() {
       // Restore the selected chat
       setChatHistory(chatToRestore.messages)
 
-      // Remove from archived chats
-      setArchivedChats((prev) => prev.filter((chat) => chat.id !== chatId))
+      // Remove from archived chats only if user is not signed in
+      // For signed-in users, we keep it in both places
+      if (!user) {
+        setArchivedChats((prev) => prev.filter((chat) => chat.id !== chatId))
+      }
     }
   }
 
@@ -232,6 +358,14 @@ export default function CareerCounselor() {
             </div>
           </div>
           
+          {/* User status indicator */}
+          {user && (
+            <div className="hidden md:flex items-center text-xs bg-white/10 px-3 py-1 rounded-full">
+              <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+              <span>{user.email}</span>
+            </div>
+          )}
+          
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-3">
             <button
@@ -255,6 +389,12 @@ export default function CareerCounselor() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-purple-700 shadow-lg p-4 z-20 flex flex-col space-y-3 border-t border-white/10">
+            {user && (
+              <div className="flex items-center text-xs bg-white/10 px-3 py-2 rounded-lg mb-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                <span>{user.email}</span>
+              </div>
+            )}
             <button
               onClick={() => {
                 archiveAndClearChat();
@@ -280,6 +420,13 @@ export default function CareerCounselor() {
       </header>
 
       <main className="flex-1 container mx-auto p-4 max-w-5xl">
+        {isLoadingChats && (
+          <div className="bg-purple-100 rounded-xl p-4 mb-6 flex items-center justify-center">
+            <Loader2 className="h-5 w-5 text-purple-600 animate-spin mr-2" />
+            <span className="text-purple-600">Loading your previous conversations...</span>
+          </div>
+        )}
+        
         <div className="bg-purple-100 rounded-xl shadow-lg p-6 mb-6 border border-gray-100 relative">
           <div className="relative z-10">
             <div className="flex flex-col space-y-6 mb-6">
@@ -389,27 +536,38 @@ export default function CareerCounselor() {
               {showArchive && (
                 <div className="space-y-3 mt-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                   {archivedChats.map((chat) => (
-                    <button
+                    <div
                       key={chat.id}
-                      onClick={() => restoreChat(chat.id)}
                       className="w-full p-4 rounded-lg transition-all bg-gray-50 hover:bg-purple-50 border border-gray-100 hover:border-purple-200 text-left flex items-center justify-between group"
                     >
-                      <div className="flex items-start">
+                      <button
+                        onClick={() => restoreChat(chat.id)}
+                        className="flex items-start flex-1"
+                      >
                         <div className="mr-3 mt-1">
                           <Clock className="h-4 w-4 text-gray-400" />
                         </div>
                         <div>
                           <div className="font-medium text-gray-800 mb-1 line-clamp-1">{chat.preview}</div>
                           <div className="text-xs text-gray-500">
-                            {chat.date.toLocaleDateString()} at{" "}
-                            {chat.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            {new Date(chat.date).toLocaleDateString()} at{" "}
+                            {new Date(chat.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                           </div>
                         </div>
+                      </button>
+                      
+                      <div className="flex items-center space-x-2">
+                        <button 
+                          onClick={(e) => deleteChat(chat.id, e)}
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                        <div className="text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <MessageSquare className="h-4 w-4" />
+                        </div>
                       </div>
-                      <div className="text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <MessageSquare className="h-4 w-4" />
-                      </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               )}

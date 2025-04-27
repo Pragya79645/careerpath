@@ -1,10 +1,59 @@
 "use client"
-import { type Dispatch, type SetStateAction, useState, type DragEvent, type FormEvent } from "react"
+import { type Dispatch, type SetStateAction, useState, type DragEvent, type FormEvent, useEffect } from "react"
 import { FiPlus } from "react-icons/fi"
 import { motion } from "framer-motion"
 import { FaTrash } from "react-icons/fa"
+import { initializeApp } from "firebase/app"
+import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, updateDoc, deleteDoc, query, where } from "firebase/firestore"
+import { getAuth, onAuthStateChanged, User } from "firebase/auth"
+
+// Firebase configuration
+const firebaseConfig = {
+  // Replace with your Firebase config
+  apiKey: "AIzaSyAxm7qtwA-HnVlbNa0nbvkJ2GVDku38VIQ",
+  authDomain: "careerpathnavigator-8783c.firebaseapp.com",
+  projectId: "careerpathnavigator-8783c",
+  storageBucket: "careerpathnavigator-8783c.firebasestorage.app",
+  messagingSenderId: "411185912011",
+  appId: "1:411185912011:web:03fb1b13a0aae0fe33634e",
+  measurementId: "G-F14VF8W9RJ"
+}
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
+const auth = getAuth(app)
 
 export const CustomKanban = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user)
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center flex-col">
+        <h1 className="text-2xl mb-4">Please sign in to access your Kanban board</h1>
+        <p>Sign in to save and access your tasks.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-purple-50 to-white text-neutral-800 mt-16">
       {/* Hero Section */}
@@ -14,18 +63,20 @@ export const CustomKanban = () => {
           <p className="text-sm sm:text-base md:text-xl">
             Organize tasks, track progress, and achieve your goals — one step at a time.
           </p>
+          <p className="mt-2 text-sm">Signed in as: {currentUser.email}</p>
         </div>
       </div>
 
       <div className="px-4 py-4 w-full sm:px-6 md:px-8 sm:py-8">
-        <Board />
+        <Board userId={currentUser.uid} />
       </div>
     </div>
   )
 }
 
-const Board = () => {
-  const [cards, setCards] = useState(DEFAULT_CARDS)
+const Board = ({ userId }: { userId: string }) => {
+  const [cards, setCards] = useState<CardType[]>([])
+  const [loading, setLoading] = useState(true)
 
   // Define columns order
   const columns = [
@@ -34,6 +85,63 @@ const Board = () => {
     { id: "doing", title: "In progress", headingColor: "text-blue-600" },
     { id: "done", title: "Complete", headingColor: "text-emerald-600" },
   ]
+
+  useEffect(() => {
+    // Subscribe to real-time updates for this user's cards
+    const userTasksRef = collection(db, "users", userId, "tasks")
+    
+    const unsubscribe = onSnapshot(userTasksRef, (snapshot) => {
+      const updatedCards: CardType[] = []
+      snapshot.forEach((doc) => {
+        updatedCards.push({
+          id: doc.id,
+          ...doc.data() as Omit<CardType, 'id'>
+        })
+      })
+      setCards(updatedCards)
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [userId])
+
+  // Update Firebase when cards change
+  const updateCardsInFirebase = async (updatedCards: CardType[]) => {
+    try {
+      // Handle card updates
+      for (const card of updatedCards) {
+        await setDoc(
+          doc(db, "users", userId, "tasks", card.id),
+          { title: card.title, column: card.column }
+        )
+      }
+      
+      // Check for deleted cards
+      const deletedCards = cards.filter(
+        oldCard => !updatedCards.some(newCard => newCard.id === oldCard.id)
+      )
+      
+      // Delete removed cards from Firebase
+      for (const card of deletedCards) {
+        await deleteDoc(doc(db, "users", userId, "tasks", card.id))
+      }
+    } catch (error) {
+      console.error("Error updating cards in Firebase:", error)
+    }
+  }
+
+  // Custom setCards function that also updates Firebase
+  const setCardsWithFirebase = (newCards: CardType[] | ((prev: CardType[]) => CardType[])) => {
+    setCards(prevCards => {
+      const updatedCards = typeof newCards === 'function' ? newCards(prevCards) : newCards
+      updateCardsInFirebase(updatedCards)
+      return updatedCards
+    })
+  }
+
+  if (loading) {
+    return <div className="w-full text-center py-8">Loading your tasks...</div>
+  }
 
   return (
     <div className="flex flex-col w-full">
@@ -46,19 +154,19 @@ const Board = () => {
             column={column.id as ColumnType}
             headingColor={column.headingColor}
             cards={cards}
-            setCards={setCards}
+            setCards={setCardsWithFirebase}
           />
         ))}
       </div>
 
       {/* Mobile Delete Zone (Fixed at bottom) */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-white shadow-lg border-t border-gray-200 p-3 flex justify-center lg:hidden">
-        <MobileDeleteZone setCards={setCards} />
+        <MobileDeleteZone setCards={setCardsWithFirebase} />
       </div>
 
       {/* Desktop Delete Zone */}
       <div className="hidden lg:block mt-4">
-        <DeleteZone setCards={setCards} />
+        <DeleteZone setCards={setCardsWithFirebase} />
       </div>
     </div>
   )
@@ -363,7 +471,7 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
     const newCard = {
       column,
       title: text.trim(),
-      id: Math.random().toString(),
+      id: doc(collection(db, "temp")).id, // Generate Firebase compatible ID
     }
 
     setCards((pv) => [...pv, newCard])
@@ -420,9 +528,5 @@ type CardType = {
   id: string
   column: ColumnType
 }
-
-const DEFAULT_CARDS: CardType[] = [
-  
-]
 
 export default CustomKanban
