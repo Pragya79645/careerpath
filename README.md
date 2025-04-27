@@ -1,6 +1,6 @@
 ![github-submission-banner](https://github.com/user-attachments/assets/a1493b84-e4e2-456e-a791-ce35ee2bcf2f)
 
-# 🚀 Career Path Navigator
+# 🚀 Career Path Navigator(PathPILOT)
 
 > Empowering learners to discover, plan, and conquer their dream careers — intelligently.
 
@@ -53,7 +53,7 @@ Career Path Navigator bridges the gap between learners and their career goals by
 - Hosting: Netlify
 
 ### Sponsor Technologies Used (if any):
-- [✅] **Groq:** _How you used Groq_  
+- [✅] **Groq:** To offer personalized career advice and roadmaps, resume analysis, interview preparation and career counselling.
 - [ ] **Monad:** _Your blockchain implementation_  
 - [ ] **Fluvio:** _Real-time data handling_  
 - [ ] **Base:** _AgentKit / OnchainKit / Smart Wallet usage_  
@@ -85,8 +85,8 @@ Highlight the most important features of your project:
 
 ## 📽️ Demo & Deliverables
 
-- **Demo Video Link:** [Paste YouTube or Loom link here]  
-- **Pitch Deck / PPT Link:** [Paste Google Slides / PDF link here]  
+- **Demo Video Link:**  https://youtu.be/cAp_itRdzr0?si=RuFHKwD04i9pFMkD 
+- **Pitch Deck / PPT Link:**   https://drive.google.com/file/d/1DIjAc6hA52QWSPt8pZCvsjC6GOzWhsk8/view?usp=sharing  
 
 ---
 
