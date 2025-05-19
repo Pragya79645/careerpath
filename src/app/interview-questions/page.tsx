@@ -91,12 +91,12 @@ export default function InterviewQuestionsGenerator() {
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-6 sm:py-8 lg:py-12">
         {/* Header */}
        
-        <div className="text-center mb-6 sm:mb-8">
+        <div className="text-center mb-6 sm:mb-8 mt-16">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-purple-100 mb-3"
+            className="inline-flex items-center gap-2 bg-white px-4 py-1.5   mb-3"
           >
             <Sparkles size={16} className="text-purple-400" />
             <span className="text-sm font-medium bg-gradient-to-r from-teal-500 to-purple-400 bg-clip-text text-transparent">

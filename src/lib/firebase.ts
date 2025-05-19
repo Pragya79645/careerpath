@@ -5,24 +5,26 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAxm7qtwA-HnVlbNa0nbvkJ2GVDku38VIQ",
+  authDomain: "careerpathnavigator-8783c.firebaseapp.com",
+  projectId: "careerpathnavigator-8783c",
+  storageBucket: "careerpathnavigator-8783c.firebasestorage.app",
+  messagingSenderId: "411185912011",
+  appId: "1:411185912011:web:03fb1b13a0aae0fe33634e",
+  measurementId: "G-F14VF8W9RJ"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-let analytics;
+let analytics = null
 if (typeof window !== "undefined") {
-  analytics = getAnalytics(app);
+  analytics = getAnalytics(app)
 }
 
-const firestore = getFirestore(app);
-const auth = getAuth(app);
+// Initialize Firestore and Auth
+const db = getFirestore(app)
+const auth = getAuth(app)
 
-export { app, analytics, firestore, auth };
+export { app, analytics, db, auth }

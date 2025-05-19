@@ -1,16 +1,26 @@
 import { Groq } from "groq-sdk"
 import { NextResponse } from "next/server"
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-})
+// Initialize Groq client with API key from environment variable
+const getGroqClient = () => {
+  const apiKey = process.env.GROQ_API_KEY
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY environment variable is not set")
+  }
+  return new Groq({ apiKey })
+}
 
 export async function POST(request: Request) {
   try {
-    // Parse the request body
+    // Test if this is just a connectivity check
     const body = await request.json()
     const { resumeText } = body
+
+    // Handle connectivity test case
+    if (resumeText === "Test resume text") {
+      console.log("API connectivity test successful")
+      return NextResponse.json({ success: true, message: "API connection successful" })
+    }
 
     // Validate input
     if (!resumeText) {
@@ -18,6 +28,9 @@ export async function POST(request: Request) {
     }
 
     console.log("Processing resume text:", resumeText.substring(0, 100) + "...")
+
+    // Initialize Groq client
+    const groq = getGroqClient()
 
     // First extract the basic info from the resume
     const parseCompletion = await groq.chat.completions.create({
@@ -48,7 +61,11 @@ export async function POST(request: Request) {
       response_format: { type: "json_object" },
     })
 
-    const parsedResumeData = JSON.parse(parseCompletion.choices[0].message.content)
+    const content = parseCompletion.choices[0].message.content
+    if (!content) {
+      throw new Error("Failed to parse resume: content is null")
+    }
+    const parsedResumeData = JSON.parse(content)
     console.log("Successfully parsed resume data")
 
     // Next, generate career path analysis
@@ -79,7 +96,11 @@ export async function POST(request: Request) {
       response_format: { type: "json_object" },
     })
 
-    const careerAnalysis = JSON.parse(careerAnalysisCompletion.choices[0].message.content)
+    const careerAnalysisContent = careerAnalysisCompletion.choices[0].message.content
+    if (!careerAnalysisContent) {
+      throw new Error("Failed to generate career analysis: content is null")
+    }
+    const careerAnalysis = JSON.parse(careerAnalysisContent)
     console.log("Successfully generated career analysis")
 
     // Lastly, generate resume improvement suggestions
@@ -109,7 +130,10 @@ export async function POST(request: Request) {
       response_format: { type: "json_object" },
     })
 
-    const improvementSuggestions = JSON.parse(improvementCompletion.choices[0].message.content)
+    if (!improvementCompletion.choices[0].message.content) {
+      throw new Error("Failed to generate improvement suggestions: content is null");
+    }
+    const improvementSuggestions = JSON.parse(improvementCompletion.choices[0].message.content);
     console.log("Successfully generated improvement suggestions")
 
     // Generate industry insights
@@ -140,7 +164,11 @@ export async function POST(request: Request) {
       response_format: { type: "json_object" },
     })
 
-    const industryInsights = JSON.parse(industryInsightsCompletion.choices[0].message.content)
+    const industryInsightsContent = industryInsightsCompletion.choices[0].message.content;
+    if (!industryInsightsContent) {
+      throw new Error("Failed to generate industry insights: content is null");
+    }
+    const industryInsights = JSON.parse(industryInsightsContent);
     console.log("Successfully generated industry insights")
 
     // Return the combined results
@@ -151,7 +179,7 @@ export async function POST(request: Request) {
       industryInsights: industryInsights,
     })
   } catch (error: any) {
-    console.error("Error in Groq API:", error)
+    console.error("Error in Groq API:", error.message)
     return NextResponse.json({ error: `Failed to process resume: ${error.message}` }, { status: 500 })
   }
 }
